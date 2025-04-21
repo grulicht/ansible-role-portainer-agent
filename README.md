@@ -127,7 +127,6 @@ These tests verify the role in **real container environments** and simulate mult
 - ✅ Docker Standalone  
 - ✅ Docker Swarm  
 - ✅ Podman  
-- ✅ Kubernetes via [k3d](https://k3d.io/)
 
 The workflow is executed automatically:
 
@@ -143,12 +142,10 @@ The [`e2e-test.yml`](.github/workflows/e2e-test.yml) workflow includes:
 
 - 🧪 `make install` – Installs all role dependencies
 - 🧼 `make lint-ansible` and `make lint-yaml` – Linting for Ansible best practices and YAML structure
-- 🔬 `make test` – Runs Molecule scenarios on various OS base images (Ubuntu, Debian, CentOS)
 - 📦 Deploys and validates Portainer Agent across:
   - Docker Standalone container
   - Docker Swarm mode with dynamic initialization
   - Podman runtime (installed on demand)
-  - Kubernetes cluster provisioned with [k3d](https://k3d.io/)
 > 💡 This automated testing helps catch regressions early and ensures the role consistently deploys Portainer Agent across supported platforms.
 ---
 
