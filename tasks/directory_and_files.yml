@@ -15,13 +15,13 @@
   ansible.builtin.file:
     path: >-
       {{
-        (agent_environment in ['standalone', 'swarm'] and portainer_agent_docker_volume_path != '/var/lib/docker/volumes')
+        (portainer_agent_mode in ['standalone', 'swarm'] and portainer_agent_docker_volume_path != '/var/lib/docker/volumes')
           | ternary(portainer_agent_docker_volume_path,
-            (agent_environment == 'podman' and portainer_agent_podman_volume_path != '/var/lib/containers/storage/volumes')
+            (portainer_agent_mode == 'podman' and portainer_agent_podman_volume_path != '/var/lib/containers/storage/volumes')
               | ternary(portainer_agent_podman_volume_path, omit))
       }}
     state: directory
     mode: '0755'
   when: >
-    (agent_environment in ['standalone', 'swarm'] and portainer_agent_docker_volume_path != '/var/lib/docker/volumes') or
-    (agent_environment == 'podman' and portainer_agent_podman_volume_path != '/var/lib/containers/storage/volumes')
+    (portainer_agent_mode in ['standalone', 'swarm'] and portainer_agent_docker_volume_path != '/var/lib/docker/volumes') or
+    (portainer_agent_mode == 'podman' and portainer_agent_podman_volume_path != '/var/lib/containers/storage/volumes')
