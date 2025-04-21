@@ -1,7 +1,7 @@
 ---
 - name: Create overlay network
   community.docker.docker_network:
-    name: portainer_agent_network
+    name: "{{ portainer_agent_network }}"
     driver: overlay
     scope: swarm
     state: present

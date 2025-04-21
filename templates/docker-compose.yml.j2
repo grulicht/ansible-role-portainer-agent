@@ -14,4 +14,15 @@ services:
       - "{{ portainer_agent_docker_sock_path }}:/var/run/docker.sock"
       - "{{ portainer_agent_docker_volumes_path }}:/var/lib/docker/volumes"
       - "{{ portainer_agent_root_mount_path }}:/host"
-    {{ 'deploy:\n      mode: global' if portainer_agent_mode == 'swarm' else '' }}
+{% if portainer_agent_mode == 'swarm' %}
+    networks:
+      - {{ portainer_agent_network }}
+    deploy:
+      mode: global
+{% endif %}
+
+{% if portainer_agent_mode == 'swarm' %}
+networks:
+  {{ portainer_agent_network }}:
+    external: true
+{% endif %}

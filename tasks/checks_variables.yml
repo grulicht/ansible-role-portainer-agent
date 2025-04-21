@@ -65,6 +65,16 @@
       ➤ Example: 'portainer_agent'
   when: portainer_agent_mode != 'k8s'
 
+- name: Validate 'portainer_agent_network' if mode is 'swarm'
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_network is defined
+      - portainer_agent_network | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_network' is not defined or empty.
+      ➤ This network must exist or be created before Swarm stack deployment.
+  when: portainer_agent_mode == 'swarm'
+
 # ───── Platform-derived paths ─────
 - name: Validate 'portainer_agent_docker_sock_path' is defined and not empty
   ansible.builtin.assert:
