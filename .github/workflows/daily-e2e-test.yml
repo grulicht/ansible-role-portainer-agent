@@ -61,7 +61,11 @@ jobs:
             . /etc/os-release
             echo "Installing Podman..."
             sudo apt-get update
-            sudo apt-get install -y podman podman-compose
+            sudo apt-get install -y podman
+          fi
+          if ! command -v podman-compose >/dev/null; then
+            echo "Installing podman-compose..."
+            sudo pip3 install podman-compose
           fi
 
       - name: Run podman playbook
