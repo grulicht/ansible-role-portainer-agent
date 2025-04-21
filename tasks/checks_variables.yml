@@ -1,0 +1,118 @@
+---
+# ───── Image name and version ─────
+- name: Validate 'portainer_agent_docker_image_name' is defined and not empty
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_docker_image_name is defined
+      - portainer_agent_docker_image_name | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_docker_image_name' is not set or is empty.
+      ➤ Example: 'docker.io/portainer/agent'
+
+- name: Validate 'portainer_agent_version' is defined and not empty
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_version is defined
+      - portainer_agent_version | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_version' is not set or is empty.
+      ➤ Example: '2.27.4'
+
+# ───── Mode and OS ─────
+- name: Validate 'portainer_agent_mode' has a valid value
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_mode in ['standalone', 'swarm', 'podman', 'k8s']
+    fail_msg: |
+      ❌ 'portainer_agent_mode' must be one of: standalone, swarm, podman, k8s.
+      ➤ Current value: '{{ portainer_agent_mode }}'
+
+- name: Validate 'portainer_agent_os' has a valid value
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_os in ['linux', 'wsl', 'wcs', 'podman']
+    fail_msg: |
+      ❌ 'portainer_agent_os' must be one of: linux, wsl, wcs, podman.
+      ➤ Current value: '{{ portainer_agent_os }}'
+
+- name: Validate 'portainer_agent_k8s_mode' if mode is 'k8s'
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_k8s_mode in ['lb', 'nodeport']
+    fail_msg: |
+      ❌ 'portainer_agent_k8s_mode' must be either 'lb' or 'nodeport'.
+      ➤ Current value: '{{ portainer_agent_k8s_mode }}'
+  when: portainer_agent_mode == 'k8s'
+
+# ───── Compose directory and container name ─────
+- name: Validate 'portainer_agent_compose_dir' is defined and not empty
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_compose_dir is defined
+      - portainer_agent_compose_dir | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_compose_dir' is not defined or is empty.
+      ➤ Example: '/srv/data/portainer-agent'
+  when: portainer_agent_mode != 'k8s'
+
+- name: Validate 'portainer_agent_container_name' is defined and not empty
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_container_name is defined
+      - portainer_agent_container_name | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_container_name' is not defined or is empty.
+      ➤ Example: 'portainer_agent'
+  when: portainer_agent_mode != 'k8s'
+
+# ───── Platform-derived paths ─────
+- name: Validate 'portainer_agent_docker_sock_path' is defined and not empty
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_docker_sock_path is defined
+      - portainer_agent_docker_sock_path | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_docker_sock_path' is not defined or is empty.
+      ➤ This is derived from 'portainer_agent_paths' based on 'portainer_agent_os'.
+  when: portainer_agent_mode in ['standalone', 'swarm', 'podman']
+
+- name: Validate 'portainer_agent_docker_volumes_path' is defined and not empty
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_docker_volumes_path is defined
+      - portainer_agent_docker_volumes_path | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_docker_volumes_path' is not defined or is empty.
+      ➤ This is derived from 'portainer_agent_paths' based on 'portainer_agent_os'.
+  when: portainer_agent_mode in ['standalone', 'swarm', 'podman']
+
+- name: Validate 'portainer_agent_root_mount_path' is defined and not empty
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_root_mount_path is defined
+      - portainer_agent_root_mount_path | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_root_mount_path' is not defined or is empty.
+      ➤ This is derived from 'portainer_agent_paths' based on 'portainer_agent_os'.
+  when: portainer_agent_mode in ['standalone', 'swarm', 'podman']
+
+# ───── Volume paths (docker / podman modes) ─────
+- name: Validate 'portainer_agent_docker_volume_path' if mode is docker
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_docker_volume_path is defined
+      - portainer_agent_docker_volume_path | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_docker_volume_path' is not defined or is empty.
+      ➤ Example: '/srv/data/docker'
+  when: portainer_agent_mode in ['standalone', 'swarm']
+
+- name: Validate 'portainer_agent_podman_volume_path' if mode is podman
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_podman_volume_path is defined
+      - portainer_agent_podman_volume_path | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_podman_volume_path' is not defined or is empty.
+      ➤ Example: '/srv/data/podman'
+  when: portainer_agent_mode == 'podman'

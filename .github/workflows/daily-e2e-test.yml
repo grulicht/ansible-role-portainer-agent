@@ -1,0 +1,89 @@
+name: E2E Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 7 * * *' # Daily at 07:00 UTC
+
+jobs:
+  test-all-modes:
+    name: Run E2E tests across modes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Ansible lint
+        run: make lint-ansible
+
+      - name: Yaml lint
+        run: make lint-yaml
+
+      - name: Run molecule test
+        run: make test
+
+      # ───── Standalone mode ─────
+      - name: Run standalone playbook
+        run: ansible-playbook -i inventory.yml playbook-linux-standalone.yml --connection=local
+
+      - name: Stop standalone container
+        run: |
+          docker ps -q --filter name=portainer_agent | xargs -r docker stop
+
+      # ───── Swarm mode ─────
+      - name: Initialize Swarm
+        run: docker swarm init
+
+      - name: Run swarm playbook
+        run: ansible-playbook -i inventory.yml playbook-linux-swarm.yml --connection=local
+
+      - name: Remove Swarm service
+        run: |
+          docker service rm portainer_agent_portainer_agent || true
+          docker swarm leave --force || true
+
+      # ───── Podman mode ─────
+      - name: Install podman if needed
+        run: |
+          if ! command -v podman >/dev/null; then
+            . /etc/os-release
+            echo "Installing Podman..."
+            sudo apt-get update
+            sudo apt-get install -y podman
+          fi
+
+      - name: Run podman playbook
+        run: ansible-playbook -i inventory.yml playbook-linux-podman.yml --connection=local
+
+      # ───── Kubernetes ─────
+      - name: Install k3d and kubectl
+        run: |
+          curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+          curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+
+      - name: Create k3d cluster
+        run: k3d cluster create portainer-test --wait
+
+      - name: Set KUBECONFIG env var
+        run: echo "KUBECONFIG=$(k3d kubeconfig write portainer-test)" >> $GITHUB_ENV
+
+      - name: Run Kubernetes playbook
+        run: ansible-playbook -i inventory.yml playbook-linux-k8s-lb.yml --connection=local
+
+      - name: Verify Portainer Agent pod is running
+        run: |
+          kubectl get pods -n portainer
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=portainer-agent -n portainer --timeout=60s

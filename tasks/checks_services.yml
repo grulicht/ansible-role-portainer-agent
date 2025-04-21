@@ -1,0 +1,83 @@
+---
+# ───── Docker ─────
+- name: Check for Docker binary
+  ansible.builtin.command: docker --version
+  register: docker_check
+  failed_when: false
+  changed_when: false
+  when: portainer_agent_mode in ["standalone", "swarm"]
+
+- name: Fail if Docker is not installed
+  ansible.builtin.fail:
+    msg: |
+      ❌ Docker is not installed or not available in PATH.
+      ➤ Please install Docker before using mode '{{ portainer_agent_mode }}'.
+  when:
+    - portainer_agent_mode in ["standalone", "swarm"]
+    - docker_check.rc != 0
+
+- name: Check for Docker Swarm (must be a manager node)
+  ansible.builtin.command: docker info --format '{{ "{{.Swarm.LocalNodeState}}" }} {{ "{{.Swarm.ControlAvailable}}" }}'
+  register: swarm_check
+  failed_when: false
+  changed_when: false
+  when: portainer_agent_mode == "swarm"
+
+- name: Fail if Swarm is not active or not a manager
+  ansible.builtin.fail:
+    msg: |
+      ❌ Docker Swarm is not initialized or this node is not a manager.
+      ➤ You must run `docker swarm init` on this host before using Swarm mode.
+  when:
+    - portainer_agent_mode == "swarm"
+    - "'active true' not in swarm_check.stdout"
+
+# ───── Podman ─────
+- name: Check for Podman binary
+  ansible.builtin.command: podman --version
+  register: podman_check
+  failed_when: false
+  changed_when: false
+  when: portainer_agent_mode == "podman"
+
+- name: Fail if Podman is not installed
+  ansible.builtin.fail:
+    msg: |
+      ❌ Podman is not installed or not available in PATH.
+      ➤ Please install Podman to use podman deployment mode.
+  when:
+    - portainer_agent_mode == "podman"
+    - podman_check.rc != 0
+
+- name: Check for podman-compose
+  ansible.builtin.command: podman-compose version
+  register: podman_compose_check
+  failed_when: false
+  changed_when: false
+  when: portainer_agent_mode == "podman"
+
+- name: Fail if podman-compose is not available
+  ansible.builtin.fail:
+    msg: |
+      ❌ 'podman-compose' is not installed or not found in PATH.
+      ➤ Please install podman-compose or switch to a different deployment method.
+  when:
+    - portainer_agent_mode == "podman"
+    - podman_compose_check.rc != 0
+
+# ───── Kubernetes ─────
+- name: Check for kubectl (Kubernetes CLI)
+  ansible.builtin.command: kubectl version --client=true
+  register: k8s_check
+  failed_when: false
+  changed_when: false
+  when: portainer_agent_mode == "k8s"
+
+- name: Fail if kubectl is not installed
+  ansible.builtin.fail:
+    msg: |
+      ❌ 'kubectl' is not installed or not available in PATH.
+      ➤ Please install kubectl to deploy the Portainer agent to Kubernetes.
+  when:
+    - portainer_agent_mode == "k8s"
+    - k8s_check.rc != 0

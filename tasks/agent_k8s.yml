@@ -1,0 +1,36 @@
+---
+- name: Set short version for Portainer URL
+  ansible.builtin.set_fact:
+    portainer_agent_url_version: "{{ portainer_agent_version | regex_replace('^([0-9]+\\.[0-9]+)\\..*$', '\\1') | regex_replace('\\.', '-') }}"
+
+- name: Deploy Portainer Agent to Kubernetes using kubectl
+  ansible.builtin.command: >
+    kubectl apply -f https://downloads.portainer.io/ce{{ portainer_agent_url_version }}/portainer-agent-k8s-{{ portainer_agent_k8s_mode }}.yaml
+  changed_when: true
+
+- name: Get Portainer Agent service details
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Service
+    namespace: portainer
+    name: portainer-agent
+  register: portainer_k8s_service
+
+- name: Ensure LoadBalancer service has an external IP
+  ansible.builtin.assert:
+    that:
+      - portainer_k8s_service.resources[0].status.loadBalancer.ingress is defined
+      - portainer_k8s_service.resources[0].status.loadBalancer.ingress[0].ip is defined or portainer_k8s_service.resources[0].status.loadBalancer.ingress[0].hostname is defined
+    fail_msg: |
+      ❌ Portainer Agent LoadBalancer service has no external IP or hostname yet.
+      ➤ Check service status: kubectl get svc -n portainer portainer-agent
+  when: portainer_agent_k8s_mode == "lb"
+
+- name: Ensure NodePort service has nodePort assigned
+  ansible.builtin.assert:
+    that:
+      - portainer_k8s_service.resources[0].spec.ports[0].nodePort is defined
+    fail_msg: |
+      ❌ Portainer Agent NodePort service has no nodePort assigned.
+      ➤ Check service: kubectl get svc -n portainer portainer-agent
+  when: portainer_agent_k8s_mode == "nodeport"

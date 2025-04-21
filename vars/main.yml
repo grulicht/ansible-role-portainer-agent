@@ -1,0 +1,19 @@
+---
+# Dir path by OS (linux, wsl, wcs)
+portainer_agent_paths:
+  linux:
+    docker_sock_path: "/var/run/docker.sock"
+    docker_volumes_path: "{{ portainer_agent_docker_volume_path }}"
+    root_mount_path: "/"
+  wsl:
+    docker_sock_path: "/var/run/docker.sock"
+    docker_volumes_path: "{{ portainer_agent_docker_volume_path }}"
+    root_mount_path: "/"
+  wcs:
+    docker_sock_path: "\\\\.\\pipe\\docker_engine"
+    docker_volumes_path: "C:\\ProgramData\\docker\\volumes"
+    root_mount_path: "C:\\"
+  podman:
+    docker_sock_path: "/run/podman/podman.sock"
+    docker_volumes_path: "{{ portainer_agent_podman_volume_path }}"
+    root_mount_path: "/"

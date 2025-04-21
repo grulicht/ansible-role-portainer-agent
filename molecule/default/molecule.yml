@@ -1,0 +1,44 @@
+---
+# Molecule docs: https://molecule.readthedocs.io/en/latest/
+
+role_name_check: 1
+
+driver:
+  name: docker
+
+platforms:
+  - name: ubuntu-24
+    image: "t0m1k/molecule-test:ubuntu-noble"
+    # dockerfile: ./docker/Dockerfile-Ubuntu-24
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    privileged: true
+    cgroupns_mode: host
+    pre_build_image: true
+
+  # - name: debian-12
+  #  image: "t0m1k/molecule-test:debian-bookworm"
+  #  # dockerfile: ./docker/Dockerfile-Debian-12
+  #  command: ${MOLECULE_DOCKER_COMMAND:-""}
+  #  volumes:
+  #    - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  #    - /var/run/docker.sock:/var/run/docker.sock:rw
+  #  privileged: true
+  #  cgroupns_mode: host
+  #  pre_build_image: true
+
+dependency:
+  name: shell
+  command: make install
+
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
+
+verifier:
+  name: testinfra
+  options:
+    junitxml: ./report.xml

@@ -1,0 +1,9 @@
+---
+- name: Deploy Portainer Agent (Windows - Swarm)
+  hosts: swarm-windows
+  become: true
+  roles:
+    - role: portainer_agent
+      vars:
+        portainer_agent_mode: swarm
+        portainer_agent_os: wcs

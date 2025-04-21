@@ -1,0 +1,27 @@
+---
+- name: Create compose directory
+  ansible.builtin.file:
+    path: "{{ portainer_agent_compose_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Template Portainer Agent docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ portainer_agent_compose_dir }}/docker-compose.yml"
+    mode: '0755'
+
+- name: Create volume path for Portainer agent
+  ansible.builtin.file:
+    path: >-
+      {{
+        (agent_environment in ['standalone', 'swarm'] and portainer_agent_docker_volume_path != '/var/lib/docker/volumes')
+          | ternary(portainer_agent_docker_volume_path,
+            (agent_environment == 'podman' and portainer_agent_podman_volume_path != '/var/lib/containers/storage/volumes')
+              | ternary(portainer_agent_podman_volume_path, omit))
+      }}
+    state: directory
+    mode: '0755'
+  when: >
+    (agent_environment in ['standalone', 'swarm'] and portainer_agent_docker_volume_path != '/var/lib/docker/volumes') or
+    (agent_environment == 'podman' and portainer_agent_podman_volume_path != '/var/lib/containers/storage/volumes')

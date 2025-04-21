@@ -1,0 +1,20 @@
+all:
+  children:
+    standalone-linux:
+      hosts:
+        localhost:
+    standalone-windows:
+      hosts:
+        localhost:
+    swarm-linux:
+      hosts:
+        localhost:
+    swarm-windws:
+      hosts:
+        localhost:
+    podman:
+      hosts:
+        localhost:
+    k8s:
+      hosts:
+        localhost:

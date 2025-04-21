@@ -1,0 +1,10 @@
+---
+- name: Deploy Portainer Agent (Linux - Kubernetes) with nodeport
+  hosts: k8s
+  become: true
+  roles:
+    - role: portainer_agent
+      vars:
+        portainer_agent_mode: k8s
+        portainer_agent_os: linux
+        portainer_agent_k8s_mode: nodeport

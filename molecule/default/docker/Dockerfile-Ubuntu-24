@@ -1,0 +1,52 @@
+FROM ubuntu:noble
+
+ENV DEBIAN_FRONTEND=noninteractive
+ARG TARGETARCH
+ENV VIRTUAL_ENV=/usr/local/lib/python3.10
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
+    apt-get install -y --no-install-recommends \
+        curl \
+        direnv \
+        git \
+        gnupg2 \
+        make \
+        python3 \
+        python3-pip \
+        python3-venv \
+        rsync \
+        software-properties-common \
+        wget
+
+RUN python3 -m venv $VIRTUAL_ENV
+
+RUN pip install \
+        "ansible-core>=2.15,<2.16" \
+        "ansible-lint==24.2.0" \
+        "yamllint<2.0" \
+        "molecule==24.2.0" \
+        "molecule-plugins[docker]<=23.5.0" \
+        "pytest>7.0,<8.0" \
+        "pytest-testinfra>=7.0,<8.0" \
+        jmespath
+
+RUN ansible-galaxy collection install \
+        "ansible.utils" \
+        "ansible.posix" \
+        "community.general" \
+        "community.docker"
+
+RUN curl -SL https://download.docker.com/linux/ubuntu/gpg | \
+        gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg && \
+    add-apt-repository "deb http://download.docker.com/linux/ubuntu noble stable" && \
+    apt-get update && \
+    apt-get install --no-install-recommends -y docker-ce docker-ce-cli containerd.io
+
+RUN apt-get clean -y && \
+    apt-get autoclean -y && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/* /var/lib/log/* /tmp/* /var/tmp/* /root/.ansible
+
+CMD ["bin/bash"]

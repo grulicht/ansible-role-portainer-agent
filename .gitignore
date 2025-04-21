@@ -1,0 +1,19 @@
+# Ansible
+ansible.cfg
+.idea
+/keys/
+
+# Mocked plugins (see Makefile target `install`)
+library
+
+# Password
+*ansible_pass*
+/ansible_pass
+
+# Pytest
+*__pycache__*
+*pytestdebug.log*
+
+# VENV
+Makefile.venv
+.venv

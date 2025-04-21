@@ -1,0 +1,14 @@
+---
+portainer_agent_mode: "" # Muste be defifined - Deployment mode: `standalone`, `swarm`, `podman`, `k8s`
+portainer_agent_os: "" # Must be defined - Platform type: `linux`, `wsl`, `wcs`, `podman`
+portainer_agent_k8s_mode: "" # Use only if `portainer_agent_mode: k8s` - Kubernetes mode: `lb` (LoadBalancer) or `nodeport`
+portainer_agent_version: "2.27.4"
+portainer_agent_compose_dir: "/srv/data/portainer_agent"
+portainer_agent_container_name: "portainer_agent"
+portainer_agent_docker_image_name: "docker.io/portainer/agent"
+portainer_agent_port: 9001
+portainer_agent_docker_volume_path: "/srv/data/docker"
+portainer_agent_podman_volume_path: "/srv/data/podman"
+portainer_agent_docker_sock_path: "{{ portainer_agent_paths[portainer_agent_os]['docker_sock_path'] }}"
+portainer_agent_docker_volumes_path: "{{ portainer_agent_paths[portainer_agent_os]['docker_volumes_path'] }}"
+portainer_agent_root_mount_path: "{{ portainer_agent_paths[portainer_agent_os]['root_mount_path'] }}"

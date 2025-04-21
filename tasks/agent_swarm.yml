@@ -1,0 +1,43 @@
+---
+- name: Create overlay network
+  community.docker.docker_network:
+    name: portainer_agent_network
+    driver: overlay
+    scope: swarm
+    state: present
+
+- name: Deploy Portainer Agent as a stack
+  ansible.builtin.command: docker stack deploy --compose-file docker-compose.yml portainer_agent
+  args:
+    chdir: "{{ portainer_agent_compose_dir }}"
+
+- name: Set full Docker Swarm service name
+  ansible.builtin.set_fact:
+    portainer_swarm_service_name: "portainer_agent_{{ portainer_agent_container_name }}"
+
+- name: Wait for Portainer Agent service to be listed
+  command: docker service ls --format '{{ "{{.Name}}" }}'
+  register: service_list
+  retries: 10
+  delay: 3
+  until: portainer_swarm_service_name in service_list.stdout_lines
+  changed_when: false
+
+- name: Wait for at least one running Swarm task
+  ansible.builtin.shell: |
+    docker service ps {{ portainer_swarm_service_name }} \
+    --format '{{ "{{.Name}}" }} {{ "{{.CurrentState}}" }}' | \
+    grep -q 'Running'
+  register: swarm_service_check
+  retries: 10
+  delay: 3
+  until: swarm_service_check.rc == 0
+  changed_when: false
+  failed_when: swarm_service_check.rc != 0
+
+- name: Fail with message if swarm_service_check failed
+  ansible.builtin.fail:
+    msg: |
+      ❌ Portainer Agent Swarm service '{{ portainer_swarm_service_name }}' is not running properly.
+      ➤ Run: docker service ps {{ portainer_swarm_service_name }}
+  when: swarm_service_check.rc != 0

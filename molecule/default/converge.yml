@@ -1,0 +1,15 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  vars:
+    portainer_agent_mode: "standalone"  # standalone / swarm / podman / k8s
+    portainer_agent_os: "linux"         # linux / wsl / wcs / podman
+
+  pre_tasks:
+    - name: Import task for install docker to docker container for molecule tests
+      ansible.builtin.include_tasks:
+        file: install_docker.yml
+
+  roles:
+    - role: portainer_agent

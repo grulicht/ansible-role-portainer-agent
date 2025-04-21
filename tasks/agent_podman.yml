@@ -1,0 +1,28 @@
+---
+- name: Enable and start podman.socket
+  ansible.builtin.systemd:
+    name: podman.socket
+    state: started
+    enabled: true
+
+- name: Ensure 'portainer' volume exists in podman
+  ansible.builtin.command: podman volume create portainer
+  register: podman_volume
+  changed_when: "'already exists' not in podman_volume.stderr"
+  failed_when: >
+    podman_volume.rc != 0 and
+    'already exists' not in podman_volume.stderr
+
+- name: Run podman-compose up
+  ansible.builtin.command: podman-compose up -d
+  args:
+    chdir: "{{ portainer_agent_compose_dir }}"
+
+- name: Check if Portainer Agent container is running (Podman)
+  ansible.builtin.shell: |
+    podman ps --format '{{ "{{.Image}}" }} {{ "{{.Status}}" }}' | grep -q 'portainer/agent.*Up'
+  register: podman_check
+  changed_when: false
+  failed_when: podman_check.rc != 0
+  retries: 5
+  delay: 3

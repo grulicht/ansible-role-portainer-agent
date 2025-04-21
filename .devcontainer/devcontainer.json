@@ -1,0 +1,41 @@
+{
+  "name": "Ansible Role Dev Environment",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "forwardPorts": [9000],
+  "postCreateCommand": "make install",
+  "features": {
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "1.21"
+    },
+    "ghcr.io/devcontainers/features/terraform:1": {
+      "version": "1.6.6"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    }
+  },
+  "runArgs": [
+    "--privileged"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "golang.Go",
+        "hashicorp.terraform",
+        "esbenp.prettier-vscode",
+        "redhat.ansible",
+        "ms-python.python"
+      ],
+      "settings": {
+        "ansible.ansibleLint.enabled": true,
+        "python.defaultInterpreterPath": "/usr/local/bin/python3"
+      }
+    }
+  },
+  "remoteUser": "vscode"
+}

@@ -1,0 +1,56 @@
+---
+- name: Include correct agent deployment
+  ansible.builtin.include_tasks:
+    file: checks_variables.yml
+    apply:
+      tags:
+        - checks-variables
+        - always
+  tags:
+    - always
+    - checks-variables
+
+- name: Include correct agent deployment
+  ansible.builtin.include_tasks:
+    file: checks_services.yml
+    apply:
+      tags:
+        - checks-services
+        - always
+  tags:
+    - always
+    - checks-services
+
+- name: Include correct agent deployment
+  ansible.builtin.include_tasks:
+    file: directory_and_files.yml
+    apply:
+      tags:
+        - directory-and-files
+        - always
+  tags:
+    - always
+    - directory-and-files
+  when: portainer_agent_mode in ["standalone", "swarm", "podman"]
+
+- name: Detect OS type for agent paths
+  ansible.builtin.set_fact:
+    portainer_agent_os: >-
+      {{
+        (ansible_system == 'Windows') | ternary(
+          (ansible_env.ProgramData is defined) | ternary('wcs', 'wsl'),
+          'linux'
+        )
+      }}
+  when: portainer_agent_os is not defined
+
+- name: Include correct agent deployment
+  ansible.builtin.include_tasks:
+    file: agent_{{ portainer_agent_mode }}.yml
+    apply:
+      tags:
+        - portainer-agent
+        - always
+  tags:
+    - always
+    - portainer-agent

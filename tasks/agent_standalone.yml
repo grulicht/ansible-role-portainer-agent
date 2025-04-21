@@ -1,0 +1,20 @@
+---
+- name: Deploy Portainer Agent (Docker standalone)
+  community.docker.docker_compose_v2:
+    project_src: "{{ portainer_agent_compose_dir }}"
+
+- name: Check if any running container uses image 'portainer/agent'
+  ansible.builtin.shell: |
+    docker ps --format '{{ "{{.Image}}" }}' | grep -q '^portainer/agent'
+  register: agent_check
+  failed_when: agent_check.rc != 0
+  changed_when: false
+  ignore_errors: false
+
+- name: Fail if no Portainer Agent container is running
+  ansible.builtin.fail:
+    msg: |
+      ❌ No running container found with image 'portainer/agent'.
+      ➤ Make sure the container is running. You can check using:
+        docker ps | grep portainer/agent
+  when: agent_check.rc != 0
