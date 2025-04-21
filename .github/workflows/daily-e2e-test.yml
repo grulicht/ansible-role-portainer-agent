@@ -72,11 +72,11 @@ jobs:
         run: ansible-playbook -i inventory.yml playbook-linux-podman.yml --connection=local
 
       # ───── Kubernetes ─────
-      - name: Install k3d and kubectl
-        run: |
-          curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
-          curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+      - name: Install kubectl
+        run: make install-kubectl
+
+      - name: Install k3d
+        run: make install-k3d
 
       - name: Create k3d cluster
         run: k3d cluster create portainer-test --wait

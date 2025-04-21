@@ -1,4 +1,4 @@
-HOST ?= debian-12
+HOST ?= ubuntu-24
 
 .PHONY: help
 help: ## Display this help message
@@ -64,3 +64,29 @@ login: ## Log into Molecule container. Default is `debian-12` - change by variab
 .PHONY: test
 test: install  ## Run complete Molecule pipeline
 	$(VENV)/molecule test
+
+.PHONY: install-k3d
+install-k3d: ## Install k3d
+	curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+
+.PHONY: install-kubectl
+install-kubectl: ## Install kubectl
+	@echo "🔍 Detecting platform and architecture..."
+	@ARCH=$$(uname -m); \
+	case $$ARCH in \
+	  x86_64) ARCH=amd64 ;; \
+	  arm64|aarch64) ARCH=arm64 ;; \
+	  *) echo "❌ Unsupported architecture: $$ARCH" && exit 1 ;; \
+	esac; \
+	OS=$$(uname | tr '[:upper:]' '[:lower:]'); \
+	if [ "$$OS" != "linux" ] && [ "$$OS" != "darwin" ]; then \
+		echo "❌ Unsupported OS: $$OS"; exit 1; \
+	fi; \
+	VERSION=$$(curl -L -s https://dl.k8s.io/release/stable.txt); \
+	URL="https://dl.k8s.io/release/$$VERSION/bin/$$OS/$$ARCH/kubectl"; \
+	echo "⬇️ Downloading kubectl $$VERSION for $$OS/$$ARCH..."; \
+	curl -LO "$$URL"; \
+	chmod +x kubectl; \
+	install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl; \
+	rm -f kubectl; \
+	echo "✅ kubectl installed to /usr/local/bin"
