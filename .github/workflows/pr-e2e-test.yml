@@ -1,11 +1,7 @@
-name: E2E Test
+name: PR E2E Tests
 
 on:
-  push:
-    branches:
-      - main
-  schedule:
-    - cron: '0 7 * * *' # Daily at 07:00 UTC
+  pull_request:
 
 jobs:
   test-all-modes:

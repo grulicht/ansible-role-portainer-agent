@@ -126,3 +126,44 @@
       ❌ 'portainer_agent_podman_volume_path' is not defined or is empty.
       ➤ Example: '/srv/data/podman'
   when: portainer_agent_mode == 'podman'
+
+# ───── Edge agent variables ─────
+- name: Validate 'portainer_agent_edge_id' is defined and not empty
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_edge_id is defined
+      - portainer_agent_edge_id | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_edge_id' is not defined or is empty.
+      ➤ Example: '003b9fda-6a68-...'
+  when: portainer_agent_edge | default(false) | bool
+
+- name: Validate 'portainer_agent_edge_key' is defined and not empty
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_edge_key is defined
+      - portainer_agent_edge_key | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_edge_key' is not defined or is empty.
+      ➤ Example: 'aHR0cHM6Ly9...'
+  when: portainer_agent_edge | default(false) | bool
+
+- name: Validate 'portainer_agent_edge_flag' is defined and not empty
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_edge_flag is defined
+      - portainer_agent_edge_flag | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_edge_flag' is not defined or is empty.
+      ➤ Typically: '1'
+  when: portainer_agent_edge | default(false) | bool
+
+- name: Validate 'portainer_agent_edge_insecure_poll' is defined and not empty
+  ansible.builtin.assert:
+    that:
+      - portainer_agent_edge_insecure_poll is defined
+      - portainer_agent_edge_insecure_poll | length > 0
+    fail_msg: |
+      ❌ 'portainer_agent_edge_insecure_poll' is not defined or is empty.
+      ➤ Typically: '1'
+  when: portainer_agent_edge | default(false) | bool

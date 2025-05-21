@@ -3,9 +3,21 @@
   ansible.builtin.set_fact:
     portainer_agent_url_version: "{{ portainer_agent_version | regex_replace('^([0-9]+\\.[0-9]+)\\..*$', '\\1') | regex_replace('\\.', '-') }}"
 
-- name: Deploy Portainer Agent to Kubernetes using kubectl
+- name: Deploy Portainer Agent to Kubernetes (non-edge)
   ansible.builtin.command: >
     kubectl apply -f https://downloads.portainer.io/ce{{ portainer_agent_url_version }}/portainer-agent-k8s-{{ portainer_agent_k8s_mode }}.yaml
+  changed_when: true
+  when:
+    - not portainer_agent_edge | default(false) | bool
+
+- name: Deploy Portainer Edge Agent to Kubernetes
+  ansible.builtin.shell: |
+    curl -fsSL https://downloads.portainer.io/ee{{ portainer_agent_url_version }}/portainer-edge-agent-setup.sh | \
+    bash -s -- "{{ portainer_agent_edge_id }}" "{{ portainer_agent_edge_key }}" "{{ portainer_agent_edge_insecure_poll | default('1') }}" "" ""
+  args:
+    executable: /bin/bash
+  when:
+    - portainer_agent_edge | default(false) | bool
   changed_when: true
 
 - name: Get Portainer Agent service details

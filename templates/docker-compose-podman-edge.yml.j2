@@ -1,0 +1,17 @@
+services:
+  {{ portainer_agent_container_name }}:
+    privileged: true
+    image: {{ portainer_agent_docker_image_name }}:{{ portainer_agent_version }}
+    restart: always
+    ports:
+      - "{{ portainer_agent_port }}:9001"
+    volumes:
+      - "{{ portainer_agent_docker_sock_path }}:/var/run/docker.sock"
+      - "{{ portainer_agent_docker_volumes_path }}:/var/lib/docker/volumes"
+      - "{{ portainer_agent_root_mount_path }}:/host"
+      - "{{ portainer_agent_compose_dir }}/data:/data"
+    environment:
+      EDGE: "{{ portainer_agent_edge_flag }}"
+      EDGE_ID: "{{ portainer_agent_edge_id }}"
+      EDGE_KEY: "{{ portainer_agent_edge_key }}"
+      EDGE_INSECURE_POLL: "{{ portainer_agent_edge_insecure_poll }}"

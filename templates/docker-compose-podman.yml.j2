@@ -1,11 +1,6 @@
 services:
   {{ portainer_agent_container_name }}:
-{% if portainer_agent_mode != 'podman' %}
-    container_name: {{ portainer_agent_container_name }}
-{% endif %}
-{% if portainer_agent_mode == 'podman' %}
     privileged: true
-{% endif %}
     image: {{ portainer_agent_docker_image_name }}:{{ portainer_agent_version }}
     restart: always
     ports:
@@ -14,15 +9,3 @@ services:
       - "{{ portainer_agent_docker_sock_path }}:/var/run/docker.sock"
       - "{{ portainer_agent_docker_volumes_path }}:/var/lib/docker/volumes"
       - "{{ portainer_agent_root_mount_path }}:/host"
-{% if portainer_agent_mode == 'swarm' %}
-    networks:
-      - {{ portainer_agent_network }}
-    deploy:
-      mode: global
-{% endif %}
-
-{% if portainer_agent_mode == 'swarm' %}
-networks:
-  {{ portainer_agent_network }}:
-    external: true
-{% endif %}

@@ -13,3 +13,8 @@ portainer_agent_podman_volume_path: "/srv/data/podman"
 portainer_agent_docker_sock_path: "{{ portainer_agent_paths[portainer_agent_os]['docker_sock_path'] }}"
 portainer_agent_docker_volumes_path: "{{ portainer_agent_paths[portainer_agent_os]['docker_volumes_path'] }}"
 portainer_agent_root_mount_path: "{{ portainer_agent_paths[portainer_agent_os]['root_mount_path'] }}"
+portainer_agent_edge: False
+portainer_agent_edge_id: ""
+portainer_agent_edge_key: ""
+portainer_agent_edge_flag: "1"
+portainer_agent_edge_insecure_poll: "1"

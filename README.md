@@ -75,6 +75,11 @@ An Ansible role to install and deploy the [Portainer Agent](https://www.portaine
 | `portainer_agent_docker_sock_path`        | Docker socket path (depends on OS/platform)                                                       | Derived from `portainer_agent_os` | Not used in `k8s`                               |
 | `portainer_agent_docker_volumes_path`     | Docker volumes bind path (depends on OS/platform)                                                 | Derived from `portainer_agent_os` | Not used in `k8s`                               |
 | `portainer_agent_root_mount_path`         | Host root bind mount (used by agent for metrics/volume access)                                    | Derived from `portainer_agent_os` | Not used in `k8s`                               |
+| `portainer_agent_edge`                    | Enables Portainer Edge Agent mode                                                                 | `False`                           | Use `true` to enable edge functionality         |
+| `portainer_agent_edge_id`                 | Edge ID assigned by Portainer for the agent                                                       | `""`                              | **Required if** `portainer_agent_edge` is `true`|
+| `portainer_agent_edge_key`                | Edge Key assigned by Portainer for the agent                                                      | `""`                              | **Required if** `portainer_agent_edge` is `true`|
+| `portainer_agent_edge_flag`               | Environment variable `EDGE`; must be `"1"`                                                        | `"1"`                             | Only relevant if Edge Agent is enabled          |
+| `portainer_agent_edge_insecure_poll`      | Environment variable `EDGE_INSECURE_POLL`; must be `"1"` to allow insecure polling                | `"1"`                             | Only relevant if Edge Agent is enabled          |
 
 ---
 
