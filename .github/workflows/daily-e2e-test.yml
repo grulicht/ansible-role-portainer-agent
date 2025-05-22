@@ -25,6 +25,11 @@ jobs:
       - name: Install dependencies
         run: make install
 
+      - name: Make role available locally as 'portainer_agent'
+        run: |
+          mkdir -p ~/.ansible/roles
+          cp -r . ~/.ansible/roles/portainer_agent
+
       - name: Ansible lint
         run: make lint-ansible
 
