@@ -12,4 +12,4 @@
   #      file: install_docker.yml
 
   roles:
-    - role: portainer_agent
+    - role: grulicht.portainer_agent

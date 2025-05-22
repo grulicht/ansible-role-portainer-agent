@@ -90,7 +90,7 @@ An Ansible role to install and deploy the [Portainer Agent](https://www.portaine
   hosts: all
   become: true
   roles:
-    - role: portainer_agent
+    - role: grulicht.portainer_agent
   vars:
     portainer_agent_mode: "standalone"
     portainer_agent_os: "linux"
