@@ -101,7 +101,7 @@ An Ansible role to install and deploy the [Portainer Agent](https://www.portaine
 
 Is there a deployment scenario or Portainer platform you'd like to see supported in this role?
 
-👉 [Open an issue](https://github.com/grulicht/ansible-role-portainer-agent/issues/new?template=feature_request.md) and we’ll consider it for implementation — or even better, submit a [Pull Request](https://github.com/grulicht/ansible-role-portainer-agent/pulls) to contribute directly!
+👉 [Open an issue](https://github.com/grulicht/ansible-role-portainer-agent/issues) and we’ll consider it for implementation — or even better, submit a [Pull Request](https://github.com/grulicht/ansible-role-portainer-agent/pulls) to contribute directly!
 
 📘 See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for contribution guidelines.
 

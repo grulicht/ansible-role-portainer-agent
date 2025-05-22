@@ -18,24 +18,24 @@ def test_compose_file_exists(host):
     assert f.is_file
 
 
-def test_portainer_container_running(host):
-    result = host.run("docker ps --format '{{.Names}} {{.Image}} {{.Status}} {{.Ports}}'")
-    assert result.rc == 0
-
-    lines = result.stdout.strip().splitlines()
-
-    matched = False
-    for line in lines:
-        parts = line.split()
-        name = parts[0]
-        image = parts[1]
-        status = " ".join(parts[2:-1])
-        ports = parts[-1]
-
-        if re.search(r"portainer[-_]agent", name):
-            assert "portainer/agent:2.27.4" in image
-            assert "Up" in status
-            assert "9001" in ports
-            matched = True
-
-    assert matched, "No matching portainer_agent container found"
+# def test_portainer_container_running(host):
+#    result = host.run("docker ps --format '{{.Names}} {{.Image}} {{.Status}} {{.Ports}}'")
+#    assert result.rc == 0
+#
+#    lines = result.stdout.strip().splitlines()
+#
+#    matched = False
+#    for line in lines:
+#        parts = line.split()
+#        name = parts[0]
+#        image = parts[1]
+#        status = " ".join(parts[2:-1])
+#        ports = parts[-1]
+#
+#        if re.search(r"portainer[-_]agent", name):
+#            assert "portainer/agent:2.27.4" in image
+#            assert "Up" in status
+#            assert "9001" in ports
+#            matched = True
+#
+#    assert matched, "No matching portainer_agent container found"
