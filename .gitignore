@@ -3,6 +3,7 @@ ansible.cfg
 .idea
 /keys/
 report.xml
+.ansible
 
 # Mocked plugins (see Makefile target `install`)
 library
