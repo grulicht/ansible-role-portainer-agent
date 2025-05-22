@@ -1,10 +1,9 @@
 ---
 - name: Converge
   hosts: all
-  become: true
   vars:
     portainer_agent_mode: "standalone"  # standalone / swarm / podman / k8s
     portainer_agent_os: "linux"         # linux / wsl / wcs / podman
 
   roles:
-    - role: grulicht.portainer_agent
+    - role: portainer_agent
