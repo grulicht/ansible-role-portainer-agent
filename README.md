@@ -3,7 +3,7 @@
     <img src="https://www.redhat.com/rhdc/managed-files/ansible-logo_white.svg" alt="Ansible" height="60">
   </a>
   &nbsp;&nbsp;&nbsp;
-  <a href="https://portainer.io/">
+  <a href="https://github.com/grulicht/ansible-role-portainer-agent">
     <img src="https://www.portainer.io/hubfs/portainer-logo-black.svg" alt="Portainer" height="60">
   </a>
 </p>
@@ -16,7 +16,7 @@
       <img alt="Contributors" src="https://img.shields.io/github/contributors/grulicht/ansible-role-portainer-agent">
   </a>
   <a href="https://github.com/grulicht/ansible-role-portainer-agent/actions">
-    <img src="https://img.shields.io/github/actions/workflow/status/grulicht/ansible-role-portainer-agent/e2e-test.yml?branch=main&label=CI e2e test" alt="GitHub Actions CI">
+    <img src="https://img.shields.io/github/actions/workflow/status/grulicht/ansible-role-portainer-agent/daily-e2e-test.yml?branch=main" alt="GitHub Actions CI">
   </a>
   &nbsp;&nbsp;&nbsp;
   <a href="https://github.com/grulicht/ansible-role-portainer-agent/tags">
@@ -66,7 +66,7 @@ An Ansible role to install and deploy the [Portainer Agent](https://www.portaine
 | `portainer_agent_docker_image_name`       | Docker image to use for the agent                                                                 | `docker.io/portainer/agent`       | Used in all modes                               |
 | `portainer_agent_version`                 | Version of the Portainer Agent image to deploy                                                    | `"2.27.4"`                        | Used as tag and in Kubernetes YAML              |
 | `portainer_agent_port`                    | Port to expose for agent communication                                                            | `9001`                            |                                                 |
-| `portainer_agent_k8s_mode`                | Kubernetes service type: `lb` (LoadBalancer) or `nodeport`                                        | `""`                              | Required if mode is `k8s`                        |
+| `portainer_agent_k8s_mode`                | Kubernetes service type: `lb` (LoadBalancer) or `nodeport`                                        | `""`                              | Required if mode is `k8s`                       |
 | `portainer_agent_compose_dir`             | Base directory where Compose/Stack manifests are stored                                           | `/srv/data/portainer_agent`       | Used for `standalone`, `swarm`, `podman`        |
 | `portainer_agent_container_name`          | Name of the Portainer Agent container or service                                                  | `portainer_agent`                 | Not used in `k8s`                               |
 | `portainer_agent_network`                 | Docker Swarm network name used in Stack deployment                                                | `"portainer_agent_network"`       | Used only in `swarm` mode                       |
