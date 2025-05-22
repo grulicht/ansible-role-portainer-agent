@@ -3,7 +3,7 @@
   hosts: podman
   become: true
   roles:
-    - role: grulicht.portainer_agent
+    - role: portainer_agent
       vars:
         portainer_agent_mode: podman
         portainer_agent_os: podman
