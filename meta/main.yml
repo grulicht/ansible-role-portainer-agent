@@ -3,7 +3,7 @@ galaxy_info:
   namespace: grulicht
   role_name: portainer_agent
   author: Tomáš Grulich
-  description: Ansible role to install and run the Portainer Agent across multiple environments and OS.
+  description: Install and run the Portainer Agent across multiple environments and OS.
   license: MIT
 
   min_ansible_version: "2.9"

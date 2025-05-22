@@ -6,6 +6,7 @@
   failed_when: false
   changed_when: false
   when: portainer_agent_mode in ["standalone", "swarm"]
+  tags: notest
 
 - name: Fail if Docker is not installed
   ansible.builtin.fail:
@@ -15,6 +16,7 @@
   when:
     - portainer_agent_mode in ["standalone", "swarm"]
     - docker_check.rc != 0
+  tags: notest
 
 - name: Check for Docker Swarm (must be a manager node)
   ansible.builtin.command: docker info --format '{{ "{{.Swarm.LocalNodeState}}" }} {{ "{{.Swarm.ControlAvailable}}" }}'

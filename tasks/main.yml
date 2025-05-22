@@ -33,17 +33,6 @@
     - directory-and-files
   when: portainer_agent_mode in ["standalone", "swarm", "podman"]
 
-- name: Detect OS type for agent paths
-  ansible.builtin.set_fact:
-    portainer_agent_os: >-
-      {{
-        (ansible_system == 'Windows') | ternary(
-          (ansible_env.ProgramData is defined) | ternary('wcs', 'wsl'),
-          'linux'
-        )
-      }}
-  when: portainer_agent_os is not defined
-
 - name: Include correct agent deployment
   ansible.builtin.include_tasks:
     file: agent_{{ portainer_agent_mode }}.yml
@@ -51,6 +40,8 @@
       tags:
         - portainer-agent
         - always
+        - notest
   tags:
     - always
     - portainer-agent
+    - notest

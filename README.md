@@ -101,16 +101,16 @@ An Ansible role to install and deploy the [Portainer Agent](https://www.portaine
 
 Is there a deployment scenario or Portainer platform you'd like to see supported in this role?
 
-👉 [Open an issue](https://github.com/grulicht/ansible-role-portainer-agent/issues/new?template=feature_request.md) and we’ll consider it for implementation — or even better, submit a [Pull Request](https://github.com/grulicht/ansible-role-portainer-agent/pulls) to contribute directly!
+👉 [Open an issue](https://github.com/grulicht/ansible-role-portainer-agent/issues) and we’ll consider it for implementation — or even better, submit a [Pull Request](https://github.com/grulicht/ansible-role-portainer-agent/pulls) to contribute directly!
 
-📘 See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for contribution guidelines.
+📘 See [CONTRIBUTING.md](https://github.com/grulicht/ansible-role-portainer-agent/blob/main/.github/CONTRIBUTING.md) for contribution guidelines.
 
 ---
 
 ## 💬 Community & Feedback
 
 Have questions, ideas, or improvements to suggest?  
-Join the **Portainer Community Slack** and hop into the [`#portainer-ansible`](https://app.slack.com/client/T2AGA35A4/C08NHK6PLUT) channel to discuss automation with Ansible.
+[Discussions](https://github.com/grulicht/ansible-role-portainer-agent/discussions)
 
 Want to report issues, submit pull requests or browse the source code?  
 Check out the [GitHub repository](https://github.com/grulicht/ansible-role-portainer-agent) for this role.
@@ -141,23 +141,10 @@ The workflow is executed automatically:
 
 ---
 
-### 🔄 CI Workflow Steps
-
-The [`e2e-test.yml`](.github/workflows/e2e-test.yml) workflow includes:
-
-- 🧪 `make install` – Installs all role dependencies
-- 🧼 `make lint-ansible` and `make lint-yaml` – Linting for Ansible best practices and YAML structure
-- 📦 Deploys and validates Portainer Agent across:
-  - Docker Standalone container
-  - Docker Swarm mode with dynamic initialization
-  - Podman runtime (installed on demand)
-> 💡 This automated testing helps catch regressions early and ensures the role consistently deploys Portainer Agent across supported platforms.
----
-
 ## Roadmap
 See the [open issues](https://github.com/grulicht/ansible-role-portainer-agent/issues) for a list of proposed features (and known issues).
 
-See [CONTRIBUTING](./.github/CONTRIBUTING.md) for more information.
+See [CONTRIBUTING](https://github.com/grulicht/ansible-role-portainer-agent/blob/main/.github/CONTRIBUTING.md) for more information.
 
 ## License
 This ansible role is 100% Open Source and is distributed under the MIT License. 
@@ -165,7 +152,7 @@ This ansible role is 100% Open Source and is distributed under the MIT License.
 See [LICENSE](https://github.com/grulicht/ansible-role-portainer-agent/blob/main/LICENSE) for more information.
 
 ## Authors
-Created by [Tomáš Grulich](https://github.com/grulicht) - to.grulich@gmail.com
+Created by [Tomáš Grulich](https://github.com/grulicht)
 
 ## Acknowledgements
 - [Ansible](https://docs.ansible.com/)

@@ -18,16 +18,16 @@ platforms:
     cgroupns_mode: host
     pre_build_image: true
 
-  # - name: debian-12
-  #  image: "t0m1k/molecule-test:debian-bookworm"
-  #  # dockerfile: ./docker/Dockerfile-Debian-12
-  #  command: ${MOLECULE_DOCKER_COMMAND:-""}
-  #  volumes:
-  #    - /sys/fs/cgroup:/sys/fs/cgroup:rw
-  #    - /var/run/docker.sock:/var/run/docker.sock:rw
-  #  privileged: true
-  #  cgroupns_mode: host
-  #  pre_build_image: true
+  - name: debian-12
+    image: "t0m1k/molecule-test:debian-bookworm"
+    # dockerfile: ./docker/Dockerfile-Debian-12
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    privileged: true
+    cgroupns_mode: host
+    pre_build_image: true
 
 dependency:
   name: shell
