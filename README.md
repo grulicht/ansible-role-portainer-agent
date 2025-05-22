@@ -144,7 +144,7 @@ The workflow is executed automatically:
 ## Roadmap
 See the [open issues](https://github.com/grulicht/ansible-role-portainer-agent/issues) for a list of proposed features (and known issues).
 
-See [CONTRIBUTING](./.github/CONTRIBUTING.md) for more information.
+See [CONTRIBUTING](https://github.com/grulicht/ansible-role-portainer-agent/blob/main/.github/CONTRIBUTING.md) for more information.
 
 ## License
 This ansible role is 100% Open Source and is distributed under the MIT License. 

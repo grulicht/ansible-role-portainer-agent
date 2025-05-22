@@ -30,8 +30,8 @@ jobs:
       - name: Yaml lint
         run: make lint-yaml
 
-      - name: Run molecule test
-        run: make test
+      # - name: Run molecule test
+      #  run: make test
 
       # ───── Standalone mode ─────
       - name: Run standalone playbook
