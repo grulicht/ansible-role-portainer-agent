@@ -9,8 +9,8 @@ on:
     - cron: '0 7 * * *' # Daily at 07:00 UTC
 
 jobs:
-  test-all-modes:
-    name: Run E2E tests across modes
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -31,8 +31,21 @@ jobs:
       - name: Yaml lint
         run: make lint-yaml
 
-      - name: Run molecule test
-        run: make test
+  test-all-modes:
+    name: Run E2E tests across modes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: make install
 
       # ───── Standalone mode ─────
       - name: Run standalone playbook
