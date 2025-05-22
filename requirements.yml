@@ -1,4 +1,8 @@
 ---
+roles:
+  - name: grulicht.portainer_agent
+    src: https://github.com/grulicht/ansible-role-portainer-agent
+
 collections:
   - name: kubernetes.core
     source: https://galaxy.ansible.com
