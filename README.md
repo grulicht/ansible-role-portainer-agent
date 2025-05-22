@@ -103,7 +103,7 @@ Is there a deployment scenario or Portainer platform you'd like to see supported
 
 👉 [Open an issue](https://github.com/grulicht/ansible-role-portainer-agent/issues) and we’ll consider it for implementation — or even better, submit a [Pull Request](https://github.com/grulicht/ansible-role-portainer-agent/pulls) to contribute directly!
 
-📘 See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for contribution guidelines.
+📘 See [CONTRIBUTING.md](https://github.com/grulicht/ansible-role-portainer-agent/blob/main/.github/CONTRIBUTING.md) for contribution guidelines.
 
 ---
 
