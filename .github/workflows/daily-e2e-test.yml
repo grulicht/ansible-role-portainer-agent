@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: make install
 
+      - name: Install test dependencies.
+        run: pip3 install ansible molecule molecule-plugins[docker] docker requests
+
       - name: Make role available locally as 'portainer_agent'
         run: |
           mkdir -p ~/.ansible/roles
