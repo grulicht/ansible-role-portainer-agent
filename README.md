@@ -4,7 +4,7 @@
   </a>
   &nbsp;&nbsp;&nbsp;
   <a href="https://github.com/grulicht/ansible-role-portainer-agent">
-    <img src="https://www.portainer.io/hubfs/portainer-logo-black.svg" alt="Portainer" height="60">
+    <img src="https://raw.githubusercontent.com/portainer/portainer/refs/heads/develop/app/assets/images/portainer-github-banner.png" alt="Portainer" height="60">
   </a>
 </p>
 
