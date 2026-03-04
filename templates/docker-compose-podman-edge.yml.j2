@@ -3,8 +3,6 @@ services:
     privileged: true
     image: {{ portainer_agent_docker_image_name }}:{{ portainer_agent_version }}
     restart: always
-    ports:
-      - "{{ portainer_agent_port }}:9001"
     volumes:
       - "{{ portainer_agent_docker_sock_path }}:/var/run/docker.sock"
       - "{{ portainer_agent_docker_volumes_path }}:/var/lib/docker/volumes"
